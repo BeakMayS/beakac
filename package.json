@@ -1,0 +1,14 @@
+{
+  "name": "acdc-bilisim",
+  "version": "2.0.0",
+  "private": true,
+  "description": "AC/DC Bilişim corporate website and admin panel",
+  "main": "server.js",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "build": "echo Build not required for this Node.js app",
+    "start": "node server.js"
+  }
+}

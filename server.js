@@ -6,8 +6,8 @@ const crypto = require('crypto');
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 3017);
 const HOST = process.env.HOST || '0.0.0.0';
-const ADMIN_USER = process.env.ACDC_ADMIN_USER || 'acdcadmin';
-const ADMIN_PASS = process.env.ACDC_ADMIN_PASS || 'ACdc2026!';
+const ADMIN_USER = process.env.ACDC_ADMIN_USER || 'admin';
+const ADMIN_PASS = process.env.ACDC_ADMIN_PASS || 'acdc1439';
 const LEGACY_DATA_DIR = path.join(ROOT, 'data');
 // GoDaddy Node.js Hosting documents public/assets as persistent across deployments.
 // Keep app data in a dot-directory and explicitly deny HTTP access to it.
@@ -64,7 +64,7 @@ function routeApi(req,res,url){
   return readBody(req).then(body=>{if(!body||typeof body!=='object'||Array.isArray(body))return send(res,400,{error:'Site verisi geçersiz.'});delete body.credentials;writeJson(SITE_FILE,body);return send(res,200,{ok:true})}).catch(e=>send(res,413,{error:e.message||'Site kaydedilemedi.'}));
  }
  if(req.method==='POST'&&url.pathname==='/api/requests')return readBody(req,100000).then(body=>{const name=clean(body.name,100),phone=clean(body.phone,30),service=clean(body.service,100),details=clean(body.details,3000);if(name.length<2||!validPhone(phone)||!service||details.length<5)return send(res,400,{error:'Lütfen ad, geçerli telefon, hizmet ve iş detaylarını doldurun.'});const rows=readRequests();const item={id:crypto.randomUUID(),createdAt:new Date().toISOString(),name,phone,service,place:clean(body.place,120),budget:clean(body.budget,80),timing:clean(body.timing,80),details,status:'Yeni'};rows.unshift(item);writeRequests(rows);return send(res,201,{ok:true,id:item.id})}).catch(e=>send(res,400,{error:e.message||'Talep kaydedilemedi.'}));
- if(req.method==='POST'&&url.pathname==='/api/admin/login')return readBody(req,10000).then(body=>{if((process.env.NODE_ENV==='production'||process.env.SITE_URL)&&(!process.env.ACDC_ADMIN_USER||!process.env.ACDC_ADMIN_PASS))return send(res,503,{error:'Canlı yönetim girişi için ACDC_ADMIN_USER ve ACDC_ADMIN_PASS ortam değişkenlerini ayarlayın.'});if(!safeEqual(body.username||'',ADMIN_USER)||!safeEqual(body.password||'',ADMIN_PASS))return send(res,401,{error:'Kullanıcı adı veya şifre yanlış.'});const token=crypto.randomBytes(32).toString('hex');sessions.set(token,Date.now()+8*60*60*1000);const secure=(req.headers['x-forwarded-proto']==='https'||req.socket.encrypted)?'; Secure':'';return send(res,200,{ok:true},{'Set-Cookie':`acdc_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800${secure}`})}).catch(e=>send(res,400,{error:e.message}));
+ if(req.method==='POST'&&url.pathname==='/api/admin/login')return readBody(req,10000).then(body=>{if(!safeEqual(body.username||'',ADMIN_USER)||!safeEqual(body.password||'',ADMIN_PASS))return send(res,401,{error:'Kullanıcı adı veya şifre yanlış.'});const token=crypto.randomBytes(32).toString('hex');sessions.set(token,Date.now()+8*60*60*1000);const secure=(req.headers['x-forwarded-proto']==='https'||req.socket.encrypted)?'; Secure':'';return send(res,200,{ok:true},{'Set-Cookie':`acdc_session=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800${secure}`})}).catch(e=>send(res,400,{error:e.message}));
  if(req.method==='POST'&&url.pathname==='/api/admin/logout'){const m=(req.headers.cookie||'').match(/(?:^|;\s*)acdc_session=([a-f0-9]+)/);if(m)sessions.delete(m[1]);const secure=(req.headers['x-forwarded-proto']==='https'||req.socket.encrypted)?'; Secure':'';return send(res,200,{ok:true},{'Set-Cookie':`acdc_session=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${secure}`});}
  if(url.pathname==='/api/admin/requests'&&req.method==='GET'){if(!requireAdmin(req,res))return;return send(res,200,{requests:readRequests()});}
  const match=url.pathname.match(/^\/api\/admin\/requests\/([a-f0-9-]+)$/i);

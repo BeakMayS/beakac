@@ -20,8 +20,8 @@ YERELDE ÇALIŞTIRMA
 5. Yönetim: http://localhost:3017/admin
 
 YEREL DEMO GİRİŞİ
-Kullanıcı: acdcadmin
-Şifre: ACdc2026!
+Kullanıcı: admin
+Şifre: acdc1439
 
 CANLIYA ALMADAN ÖNCE GÜVENLİK
 Canlı ortamda ACDC_ADMIN_USER ve ACDC_ADMIN_PASS ortam değişkenlerini mutlaka ayarlayın ve güçlü, benzersiz bir parola kullanın. Bu ZIP'teki varsayılan giriş bilgilerini canlı sitede bırakmayın. Yönetim oturumu sunucu tarafında tutulur; oturumlar uygulama yeniden başladığında sona erer.
@@ -30,8 +30,8 @@ GODADDY NODE.JS HOSTING
 - ZIP'in kökünde package.json ve server.js bulunmalı; ZIP'i açınca bunlar bir alt klasörün içine gizlenmemeli.
 - GoDaddy'nin Node.js uygulama ekranından ZIP'i içe aktarın, Preview üzerinde test edin, sonra Publish edin.
 - Ortam değişkenleri (production/publish ortamı):
-  ACDC_ADMIN_USER = kendi yönetici kullanıcı adınız
-  ACDC_ADMIN_PASS = güçlü ve benzersiz parola
+  ACDC_ADMIN_USER = admin (veya seçtiğiniz kullanıcı)
+  ACDC_ADMIN_PASS = acdc1439 (canlıda değiştirmeniz önerilir)
   SITE_URL = https://gercek-domaininiz.com (gerçek alan adınız)
 - Uygulama GoDaddy'nin verdiği PORT ortam değişkenini kullanır.
 - Site durumu ve teklif talepleri public/assets/.acdc-data altında tutulur; sunucu bu dizine HTTP erişimini engeller. GoDaddy'nin kullandığınız planında bu klasörün deployment'lar arasında korunduğunu canlıya almadan önce test edin. Ayrıca periyodik yedek alın.
@@ -52,3 +52,9 @@ NOTLAR
 - JSON-LD'de şu an Kırklareli hizmet alanı ve telefon bilgisi var; fiziksel işletme adresi verilmediği için uydurulmadı.
 - Gerçek domain SITE_URL olarak ayarlanmalı; aksi hâlde canonical ve sitemap gelen host adına göre oluşturulur.
 - Bu sürümün dosya ve API kontrolleri yapıldı; GoDaddy canlı ortamında yayın, DNS ve kalıcı depolama testi kullanıcı hesabında ayrıca yapılmalıdır.
+
+
+V10 DÜZELTMESİ
+- ZIP kökünde package.json, server.js ve index.html bulunur; artık iç klasör içine gizlenmez.
+- İçeri alınan gallery görselleri/videoları public/assets/gallery altında korunur.
+- Varsayılan admin girişi: admin / acdc1439. GoDaddy ortam değişkenleri tanımlıysa bunlar önceliklidir.

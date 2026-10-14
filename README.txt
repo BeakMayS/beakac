@@ -34,7 +34,7 @@ GODADDY NODE.JS HOSTING
   ACDC_ADMIN_PASS = acdc1439 (canlıda değiştirmeniz önerilir)
   SITE_URL = https://gercek-domaininiz.com (gerçek alan adınız)
 - Uygulama GoDaddy'nin verdiği PORT ortam değişkenini kullanır.
-- Site durumu ve teklif talepleri public/assets/.acdc-data altında tutulur; sunucu bu dizine HTTP erişimini engeller. GoDaddy'nin kullandığınız planında bu klasörün deployment'lar arasında korunduğunu canlıya almadan önce test edin. Ayrıca periyodik yedek alın.
+- Site durumu ve teklif talepleri public/assets/acdc-data altında tutulur; sunucu bu dizine HTTP erişimini engeller. Önceki public/assets/.acdc-data kayıtları ilk açılışta otomatik taşınır; mevcut hedef dosyaların üstüne yazılmaz. GoDaddy dosya yöneticisinden bu klasörün ve public/assets/gallery içindeki dosyaların yayından sonra da durduğunu kontrol edin. Ayrıca periyodik yedek alın.
 - Eğer GoDaddy ortamınız public/assets altındaki dosyaları doğrudan CDN ile sunuyorsa, özel verileri bu dizinde tutmayın; harici veritabanı/özel kalıcı depolama kullanın.
 - Canlıya geçmeden önce yönetici parolasını ayarlayın, yedek alın ve HTTPS üzerinden test edin.
 
@@ -58,3 +58,15 @@ V10 DÜZELTMESİ
 - ZIP kökünde package.json, server.js ve index.html bulunur; artık iç klasör içine gizlenmez.
 - İçeri alınan gallery görselleri/videoları public/assets/gallery altında korunur.
 - Varsayılan admin girişi: admin / acdc1439. GoDaddy ortam değişkenleri tanımlıysa bunlar önceliklidir.
+
+
+V12 MOBİL VİDEO DÜZELTMESİ:
+- Node.js statik dosya sunucusu artık HTTP Range isteklerini (206 Partial Content) destekler. iPhone Safari videoları bu sayede parçalı yüklenebilir/oynatılabilir.
+- GoDaddy’ye aktarırken server.js dosyasını da bu sürümden yükleyin ve uygulamayı yeniden başlatın.
+
+
+V13 KALICILIK DÜZELTMESİ:
+- Site durumu ve galeri listesi public/assets/acdc-data klasörüne yazılır.
+- Önceki public/assets/.acdc-data/site-state.json ve requests.json dosyaları, yeni dosyalar yoksa otomatik taşınır.
+- Özel veri klasörüne HTTP üzerinden erişim engellenir.
+- GoDaddy canlı ortamında 30-60 dakika sonra kaybolma probleminin giderildiği mutlaka yükleme, yeniden başlatma ve bekleme testiyle doğrulanmalıdır.
